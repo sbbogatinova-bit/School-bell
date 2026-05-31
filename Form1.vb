@@ -53,13 +53,16 @@ Public Class Form1
                 Dim cell As DataGridViewCell = row.Cells(startColIndex)
                 If cell.Value IsNot Nothing Then
                     If cell.Value.ToString = currentTime And lastring <> currentTime Then
-                        ' първи ред = първи час
-                        If row.Index = 0 And Not roosterRungToday Then
-                            PlayBell1()   ' petlence.wav
-                            roosterRungToday = True
-                        Else
-                            PlayBell()    ' bell.wav
-                        End If
+                Dim soundTime As String = cell.Value.ToString().Replace(":", "_")
+                    Dim filePath As String = AppDomain.CurrentDomain.BaseDirectory & "bells\" & soundTime & ".wav"
+                    If System.IO.File.Exists(filePath) Then
+                        My.Computer.Audio.Play(filePath, AudioPlayMode.Background)
+                    ElseIf row.Index = 0 And Not roosterRungToday Then
+                        PlayBell1()
+                        roosterRungToday = True
+                    Else
+                        PlayBell()
+                    End If
                         lastring = currentTime
                     End If
                 End If
@@ -84,7 +87,13 @@ Public Class Form1
                 Dim cell As DataGridViewCell = row.Cells(endColIndex)
                 If cell.Value IsNot Nothing Then
                     If cell.Value.ToString = currentTime And lastring <> currentTime Then
-                        PlayBell() ' винаги обикновен звънец
+                       Dim soundTime As String = cell.Value.ToString().Replace(":", "_")
+                        Dim filePath As String = AppDomain.CurrentDomain.BaseDirectory & "bells\" & soundTime & ".wav"
+                        If System.IO.File.Exists(filePath) Then
+                            My.Computer.Audio.Play(filePath, AudioPlayMode.Background)
+                        Else
+                            PlayBell()
+                        End If
                         lastring = currentTime
                     End If
                 End If
